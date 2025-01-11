@@ -6,12 +6,13 @@ use App\Models\Website;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class MonitoringDashboardController extends Controller
 {
     public function index()
     {
-        $websites = Website::all();
+        $websites = Auth::user()->websites;
         $dashboardData = $this->prepareDashboardData($websites);
 
         return view('monitoring-dashboard', [

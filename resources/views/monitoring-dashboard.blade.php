@@ -1,5 +1,6 @@
 <x-app-layout>
-<div class="container px-4 py-8 mx-auto">
+    <div class="py-12">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
     <h1 class="mb-8 text-3xl font-bold">Website Monitoring Dashboard</h1>
 
     <div class="grid grid-cols-1 gap-6">
@@ -100,6 +101,7 @@
             </div>
         </div>
         @endforeach
+    </div>
     </div>
 </div>
 

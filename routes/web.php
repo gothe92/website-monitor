@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\MonitoringDashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [MonitoringDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::middleware(['auth'])->group(function () {
+    Route::resource('websites', WebsiteController::class);
+    Route::get('/monitoring', [MonitoringDashboardController::class, 'index'])->name('monitoring.dashboard');
+});
 
 
 
