@@ -108,7 +108,7 @@ class MonitoringDashboardController extends Controller
         $successLogs = $logs->where('status', 'success');
 
         return [
-            'slow_responses' => $successLogs->where('response_time', '>', 10000)->count(),
+            'slow_responses' => $successLogs->where('response_time', '>', 5000)->count(),
             'errors' => $logs->where('status', 'error')->count(),
             'fast_responses' => $successLogs->where('response_time', '<', 1000)->count(),
             'average_response_trend' => $this->calculateResponseTrend($logs)
