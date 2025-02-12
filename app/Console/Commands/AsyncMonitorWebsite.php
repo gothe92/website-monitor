@@ -54,7 +54,7 @@ class AsyncMonitorWebsite extends Command
                             ]);
 
                             // Ellenőrzés a válaszidőre
-                            if ($responseTime > 10000) {
+                            if ($responseTime > 20000) {
                                 $this->sendDiscordNotification(
                                     "⚠️ Slow Response Warning",
                                     "Website: {$website->url}\n" .
