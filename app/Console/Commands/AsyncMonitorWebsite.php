@@ -33,6 +33,8 @@ class AsyncMonitorWebsite extends Command
     public function handle()
     {
         try {
+            $this->cleanupOldLogs();
+
             $websites = Website::all();
 
             // Indítjuk az összes lekérdezést párhuzamosan
@@ -89,6 +91,23 @@ class AsyncMonitorWebsite extends Command
             Log::error('Async website monitoring failed: ' . $e->getMessage());
         }
     }
+
+        /**
+     * Törli az 1 napnál régebbi log bejegyzéseket
+     */
+    private function cleanupOldLogs()
+    {
+        try {
+            $deletedCount = WebsiteLog::where('created_at', '<', Carbon::now()->subDay())
+                ->delete();
+
+            $this->info("Cleaned up {$deletedCount} old log entries.");
+        } catch (\Exception $e) {
+            Log::error('Log cleanup failed: ' . $e->getMessage());
+            $this->error('Log cleanup failed: ' . $e->getMessage());
+        }
+    }
+
 
     private function sendDiscordNotification($title, $description)
     {
