@@ -60,8 +60,8 @@ class AsyncMonitorWebsite extends Command
                                 $this->sendDiscordNotification(
                                     "⚠️ Slow Response Warning",
                                     "Website: {$website->url}\n" .
-                                    "Response Time: " . round($responseTime/1000, 2) . " seconds\n" .
-                                    "Average Response Time: " . round($website->average_response_time/1000, 2) . " seconds"
+                                        "Response Time: " . round($responseTime / 1000, 2) . " seconds\n" .
+                                        "Average Response Time: " . round($website->average_response_time / 1000, 2) . " seconds"
                                 );
                             }
                         },
@@ -70,8 +70,8 @@ class AsyncMonitorWebsite extends Command
                             // Check if it's an SSL error
                             $errorMessage = $exception->getMessage();
                             $isSSLError = strpos($errorMessage, 'SSL') !== false ||
-                                         strpos($errorMessage, 'certificate') !== false ||
-                                         strpos($errorMessage, 'cert') !== false;
+                                strpos($errorMessage, 'certificate') !== false ||
+                                strpos($errorMessage, 'cert') !== false;
 
                             if ($isSSLError) {
                                 // For SSL errors, still try to measure the response time
@@ -102,13 +102,13 @@ class AsyncMonitorWebsite extends Command
 
                                     $this->info("Successfully loaded {$website->url} despite SSL error. Response time: {$responseTime}ms");
 
-                                    if ($responseTime > 20000) {
+                                    if ($responseTime > 20000 && $website->notification) {
                                         $this->sendDiscordNotification(
                                             "⚠️ Slow Response Warning (SSL Issue)",
                                             "Website: {$website->url}\n" .
-                                            "Response Time: " . round($responseTime/1000, 2) . " seconds\n" .
-                                            "Note: Site has SSL certificate issues but is loading\n" .
-                                            "Average Response Time: " . round($website->average_response_time/1000, 2) . " seconds"
+                                                "Response Time: " . round($responseTime / 1000, 2) . " seconds\n" .
+                                                "Note: Site has SSL certificate issues but is loading\n" .
+                                                "Average Response Time: " . round($website->average_response_time / 1000, 2) . " seconds"
                                         );
                                     }
                                 } catch (\Exception $retryException) {
@@ -117,17 +117,18 @@ class AsyncMonitorWebsite extends Command
                                         'website_id' => $website->id,
                                         'status' => 'error',
                                         'error_message' => 'Original SSL error: ' . $errorMessage .
-                                                          ' | Retry failed: ' . $retryException->getMessage()
+                                            ' | Retry failed: ' . $retryException->getMessage()
                                     ]);
-
-                                    $this->sendDiscordNotification(
-                                        "🔴 Website Down Alert (SSL Issue)",
-                                        "Website: {$website->url}\n" .
-                                        "Error: SSL/Certificate error and retry failed\n" .
-                                        "Details: {$retryException->getMessage()}\n" .
-                                        "Last Successful Check: " .
-                                        ($website->logs()->where('status', 'success')->latest()->first()?->created_at?->diffForHumans() ?? 'Never')
-                                    );
+                                    if ($website->notification) {
+                                        $this->sendDiscordNotification(
+                                            "🔴 Website Down Alert (SSL Issue)",
+                                            "Website: {$website->url}\n" .
+                                                "Error: SSL/Certificate error and retry failed\n" .
+                                                "Details: {$retryException->getMessage()}\n" .
+                                                "Last Successful Check: " .
+                                                ($website->logs()->where('status', 'success')->latest()->first()?->created_at?->diffForHumans() ?? 'Never')
+                                        );
+                                    }
                                 }
                             } else {
                                 // For non-SSL errors, handle normally
@@ -137,13 +138,15 @@ class AsyncMonitorWebsite extends Command
                                     'error_message' => $errorMessage
                                 ]);
 
-                                $this->sendDiscordNotification(
-                                    "🔴 Website Down Alert",
-                                    "Website: {$website->url}\n" .
-                                    "Error: {$errorMessage}\n" .
-                                    "Last Successful Check: " .
-                                    ($website->logs()->where('status', 'success')->latest()->first()?->created_at?->diffForHumans() ?? 'Never')
-                                );
+                                if ($website->notification) {
+                                    $this->sendDiscordNotification(
+                                        "🔴 Website Down Alert",
+                                        "Website: {$website->url}\n" .
+                                            "Error: {$errorMessage}\n" .
+                                            "Last Successful Check: " .
+                                            ($website->logs()->where('status', 'success')->latest()->first()?->created_at?->diffForHumans() ?? 'Never')
+                                    );
+                                }
                             }
                         }
                     );
@@ -151,7 +154,6 @@ class AsyncMonitorWebsite extends Command
 
             // Wait for all promises to complete
             Promise\Utils::settle($this->promises)->wait();
-
         } catch (\Exception $e) {
             Log::error('Async website monitoring failed: ' . $e->getMessage());
         }
