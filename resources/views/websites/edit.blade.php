@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="container px-4 py-8 mx-auto">
-        <div class="max-w-md mx-auto  ">
-            <div class="px-6 py-4 bg-white shadow-lg   rounded-lg">
+        <div class="max-w-md mx-auto ">
+            <div class="px-6 py-4 bg-white rounded-lg shadow-lg">
                 <h2 class="mb-4 text-2xl font-bold">Weboldal Szerkesztése</h2>
 
                 <form action="{{ route('websites.update', $website) }}" method="POST">
@@ -26,6 +26,13 @@
                         @error('url')
                         <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="notification" class="inline-flex items-center">
+                            <input type="checkbox" name="notification" id="notification" class="w-5 h-5 text-blue-600 form-checkbox" {{ old('notification', $website->notification) ? 'checked' : '' }}>
+                            <span class="ml-2 text-sm text-gray-700">Discord értesítések engedélyezése</span>
+                        </label>
                     </div>
 
                     <div class="mb-4">
@@ -60,7 +67,7 @@
                     </div>
                 </form>
             </div>
-            <div class="flex space-x-4 mt-4 justify-end">
+            <div class="flex justify-end mt-4 space-x-4">
                 <form action="{{ route('websites.destroy', $website) }}" method="POST" class="inline"
                     onsubmit="return confirm('Biztosan törölni szeretnéd ezt a weboldalt?');">
                     @csrf
