@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="container px-4 py-8 mx-auto">
-        <div class="max-w-md mx-auto overflow-hidden bg-white rounded-lg shadow-lg">
-            <div class="px-6 py-4">
+        <div class="max-w-md mx-auto  ">
+            <div class="px-6 py-4 bg-white shadow-lg   rounded-lg">
                 <h2 class="mb-4 text-2xl font-bold">Weboldal Szerkesztése</h2>
 
                 <form action="{{ route('websites.update', $website) }}" method="POST">
@@ -14,7 +14,7 @@
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('name') border-red-500 @enderror"
                             value="{{ old('name', $website->name) }}" required>
                         @error('name')
-                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
+                        <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -24,15 +24,8 @@
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('url') border-red-500 @enderror"
                             value="{{ old('url', $website->url) }}" required>
                         @error('url')
-                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
+                        <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="notification" class="inline-flex items-center">
-                            <input type="checkbox" name="notification" id="notification" class="form-checkbox h-5 w-5 text-blue-600" {{ old('notification', $website->notification) ? 'checked' : '' }}>
-                            <span class="ml-2 text-sm text-gray-700">Discord értesítések engedélyezése</span>
-                        </label>
                     </div>
 
                     <div class="mb-4">
@@ -67,19 +60,19 @@
                     </div>
                 </form>
             </div>
+            <div class="flex space-x-4 mt-4 justify-end">
+                <form action="{{ route('websites.destroy', $website) }}" method="POST" class="inline"
+                    onsubmit="return confirm('Biztosan törölni szeretnéd ezt a weboldalt?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                        class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700 focus:outline-none focus:shadow-outline">
+                        Törlés
+                    </button>
+                </form>
 
+            </div>
         </div>
-        <div class="flex space-x-4">
-            <form action="{{ route('websites.destroy', $website) }}" method="POST" class="inline"
-                onsubmit="return confirm('Biztosan törölni szeretnéd ezt a weboldalt?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                    class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700 focus:outline-none focus:shadow-outline">
-                    Törlés
-                </button>
-            </form>
 
-        </div>
     </div>
 </x-app-layout>
