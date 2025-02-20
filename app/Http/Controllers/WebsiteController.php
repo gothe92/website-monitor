@@ -29,6 +29,8 @@ class WebsiteController extends Controller
             'notification' => 'boolean'
         ]);
 
+        $validated['notification'] = $request->has('notification');
+
         $website = new Website($validated);
         $website->user_id = Auth::id();
         $website->save();
@@ -45,13 +47,13 @@ class WebsiteController extends Controller
 
     public function update(Request $request, Website $website)
     {
-
-
         $validated = $request->validate([
             'name' => 'required|max:255',
             'url' => 'required|url|max:255',
             'notification' => 'boolean'
         ]);
+
+        $validated['notification'] = $request->has('notification');
 
         $website->update($validated);
 
