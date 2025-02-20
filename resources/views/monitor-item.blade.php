@@ -13,16 +13,6 @@
                 </a>
             </div>
 
-            {{-- Átlagos válaszidő --}}
-            <div class="flex items-center mx-4">
-                @php
-                    $averageResponseTime = collect($website['logs'])->avg('response_time');
-                @endphp
-                <span class="text-sm text-gray-600">
-                    Átlag: {{ $averageResponseTime ? round($averageResponseTime / 1000, 2) . 's' : 'Nincs adat' }}
-                </span>
-            </div>
-
             {{-- Státusz jelző --}}
             <div class="flex items-center">
                 <span class="px-3 py-1 rounded-full text-sm {{ $website['stats']['status']['is_online'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
