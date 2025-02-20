@@ -29,6 +29,13 @@
                     </div>
 
                     <div class="mb-4">
+                        <label for="notification" class="inline-flex items-center">
+                            <input type="checkbox" name="notification" id="notification" class="form-checkbox h-5 w-5 text-blue-600" {{ old('notification', $website->notification) ? 'checked' : '' }}>
+                            <span class="ml-2 text-sm text-gray-700">Discord értesítések engedélyezése</span>
+                        </label>
+                    </div>
+
+                    <div class="mb-4">
                         <label class="block mb-2 text-sm font-bold text-gray-700">Monitorozási Statisztikák</label>
                         <div class="p-3 text-sm rounded bg-gray-50">
                             <p class="mb-1">Utolsó ellenőrzés:

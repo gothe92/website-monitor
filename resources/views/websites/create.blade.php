@@ -27,6 +27,13 @@
                            required>
                 </div>
 
+                <div class="mb-4">
+                    <label for="notification" class="inline-flex items-center">
+                        <input type="checkbox" name="notification" id="notification" class="form-checkbox h-5 w-5 text-blue-600" {{ old('notification') ? 'checked' : '' }}>
+                        <span class="ml-2 text-sm text-gray-700">Discord értesítések engedélyezése</span>
+                    </label>
+                </div>
+
                 <div class="flex items-center justify-between">
                     <button type="submit"
                             class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">

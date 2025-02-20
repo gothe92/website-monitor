@@ -56,7 +56,7 @@ class AsyncMonitorWebsite extends Command
                             ]);
 
                             // Check response time
-                            if ($responseTime > 20000) {
+                            if ($responseTime > 20000 && $website->notification) {
                                 $this->sendDiscordNotification(
                                     "⚠️ Slow Response Warning",
                                     "Website: {$website->url}\n" .

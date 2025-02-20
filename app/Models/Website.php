@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Website extends Model
 {
-    protected $fillable = ['url', 'name', 'user_id'];
+    protected $fillable = ['url', 'name', 'user_id', 'notification'];
 
     public function logs(): HasMany
     {
