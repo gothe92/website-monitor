@@ -8,7 +8,7 @@
                     <div class="flex flex-col p-4 bg-white rounded-lg shadow-lg">
                         {{-- 1. Cím és URL --}}
                         <div class="grid grid-cols-2">
-                            <div class="flex flex-col">
+                            
                                 <div class="mb-4">
                                     <h2 class="text-xl font-semibold">{{ $website['name'] }}</h2>
                                     <a href="{{ $website['url'] }}"
@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
 
-                            </div>
+                            
                         </div>
 
                         {{-- 3. Válaszidő grafikon (utolsó óra) --}}
