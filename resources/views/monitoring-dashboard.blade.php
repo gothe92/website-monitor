@@ -5,35 +5,37 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @foreach($websites as $website)
-        <div class="flex items-center p-4 bg-white rounded-lg shadow-lg justify-between">
-            <div class="flex-1">
+        <div class="flex flex-col p-4 bg-white rounded-lg shadow-lg">
+            {{-- 1. Cím és URL --}}
+            <div class="mb-4">
                 <h2 class="text-xl font-semibold">{{ $website['name'] }}</h2>
-                <a href="{{ $website['url'] }}" class="text-sm text-blue-600 hover:text-blue-800" target="_blank">
-                    {{ $website['url'] }}
+                <a href="{{ $website['url'] }}" class="text-sm text-blue-600 hover:text-blue-800 truncate block" target="_blank">
+                    {{ Str::limit($website['url'], 50) }}
                 </a>
             </div>
 
-            {{-- Átlagos válaszidő --}}
-            <div class="flex items-center mx-4">
+            {{-- 2. Átlag és státusz --}}
+            <div class="flex items-center justify-between mb-4">
                 @php
                     $averageResponseTime = collect($website['logs'])->avg('response_time');
                 @endphp
-                <span class="text-sm text-gray-600">
-                    Átlag: {{ $averageResponseTime ? round($averageResponseTime / 1000, 2) . 's' : 'Nincs adat' }}
-                </span>
+                <div class="flex flex-col">
+                    <span class="text-sm text-gray-600">
+                        Átlag: {{ $averageResponseTime ? round($averageResponseTime / 1000, 2) . 's' : 'Nincs adat' }}
+                    </span>
+                    <span class="px-3 py-1 rounded-full text-sm mt-2 {{ $website['stats']['status']['is_online'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                        {{ $website['stats']['status']['is_online'] ? 'Online' : 'Offline' }}
+                    </span>
+                </div>
             </div>
 
-            {{-- Státusz jelző --}}
-            <div class="flex items-center">
-                <span class="px-3 py-1 rounded-full text-sm {{ $website['stats']['status']['is_online'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                    {{ $website['stats']['status']['is_online'] ? 'Online' : 'Offline' }}
-                </span>
-            </div>
-
-            {{-- Válaszidő grafikon (kicsiben) --}}
-            <div class="relative flex flex-col h-20 rounded-lg bg-gray-50 flex-1 ml-4">
+            {{-- 3. Válaszidő grafikon (utolsó óra) --}}
+            <div class="relative flex flex-col h-32 rounded-lg bg-gray-50">
                 <div class="flex w-full h-full">
-                    @foreach($website['logs'] as $log)
+                    @php
+                        $lastHourLogs = collect($website['logs'])->take(-60);
+                    @endphp
+                    @foreach($lastHourLogs as $log)
                         @php
                             $height = $log['response_time'] ? ($log['response_time'] / 10000) * 100 : 0;
                             $color = match(true) {
@@ -44,8 +46,8 @@
                                 default => 'bg-green-500'
                             };
                         @endphp
-                        <div class="flex items-end flex-1 mx-px" title="{{ $log['formatted_time'] }} - {{ $log['response_time'] ? round($log['response_time']/1000, 2).'s' : 'No data' }}">
-                            <div class="{{ $color }} hover:opacity-75 transition-opacity flex-1"
+                        <div class="flex items-end flex-1 mx-0.5" title="{{ $log['formatted_time'] }} - {{ $log['response_time'] ? round($log['response_time']/1000, 2).'s' : 'No data' }}">
+                            <div class="{{ $color }} hover:opacity-75 transition-opacity w-full"
                                  style="height: {{ max($height, 5) }}%">
                             </div>
                         </div>
