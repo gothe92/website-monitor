@@ -46,7 +46,7 @@
                                 default => 'bg-green-500'
                             };
                         @endphp
-                        <div class="flex items-end flex-1 mx-0.5" title="{{ $log['formatted_time'] }} - {{ $log['response_time'] ? round($log['response_time']/1000, 2).'s' : 'No data' }}">
+                        <div class="flex items-end flex-1" title="{{ $log['formatted_time'] }} - {{ $log['response_time'] ? round($log['response_time']/1000, 2).'s' : 'No data' }}">
                             <div class="{{ $color }} hover:opacity-75 transition-opacity w-full"
                                  style="height: {{ max($height, 5) }}%">
                             </div>
