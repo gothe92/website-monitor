@@ -7,13 +7,15 @@
                 @foreach ($websites as $website)
                     <div class="flex flex-col p-4 bg-white rounded-lg shadow-lg">
                         {{-- 1. Cím és URL --}}
-                        <div class="grid grid-cols-3">
 
-                            <div class="mb-4">
-                                <a href="{{ $website['url'] }}" target="_blank">
-                                    <h2 class="text-lg font-semibold">{{ $website['name'] }}</h2>
-                                </a>
-                            </div>
+                        <div class="mb-4">
+                            <a href="{{ $website['url'] }}" target="_blank">
+                                <h2 class="text-lg font-semibold">{{ $website['name'] }}</h2>
+                            </a>
+                        </div>
+
+                        <div class="grid grid-cols-2">
+
 
                             @php
                                 $averageResponseTime = collect($website['logs'])->avg('response_time');
