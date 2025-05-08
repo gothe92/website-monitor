@@ -23,7 +23,7 @@ class MonitoringDashboardController extends Controller
     private function prepareDashboardData(Collection $websites)
     {
         return $websites->map(function ($website) {
-            $hourAgo = now()->subHour(1);
+            $hourAgo = now()->subHour(2);
 
             // Lekérjük az elmúlt óra logjait
             $logs = $website->logs()

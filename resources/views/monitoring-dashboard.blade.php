@@ -33,7 +33,7 @@
             <div class="relative flex flex-col h-32 rounded-lg bg-gray-50">
                 <div class="flex w-full h-full">
                     @php
-                        $lastHourLogs = collect($website['logs'])->take(-60);
+                        $lastHourLogs = collect($website['logs'])->take(-120);
                     @endphp
                     @foreach($lastHourLogs as $log)
                         @php
