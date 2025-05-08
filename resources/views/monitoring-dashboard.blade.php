@@ -14,7 +14,7 @@
                             </a>
                         </div>
 
-                        <div class="grid grid-cols-2">
+                        <div class="grid grid-cols-2 mb-4">
 
 
                             @php
