@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
     <h1 class="mb-8 text-3xl font-bold">Website Monitoring Dashboard</h1>
 
-    <div class="grid grid-cols-1 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @foreach($websites as $website)
         <div class="flex items-center p-4 bg-white rounded-lg shadow-lg justify-between">
             <div class="flex-1">

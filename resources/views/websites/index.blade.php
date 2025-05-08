@@ -1,62 +1,38 @@
 <x-app-layout>
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between mb-6">
-        <h1 class="text-3xl font-bold">Monitorozott Weboldalak</h1>
-        <a href="{{ route('websites.create') }}"
-           class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
-            Új Weboldal
-        </a>
-    </div>
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-3xl font-bold">Monitorozott Weboldalak</h1>
+                <a href="{{ route('websites.create') }}"
+                   class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
+                    Új Weboldal
+                </a>
+            </div>
 
-    <div class="overflow-hidden bg-white rounded-lg shadow">
-        <table class="min-w-full">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Név</th>
-                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">URL</th>
-                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Státusz</th>
-                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Műveletek</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach($websites as $website)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $website->name }}</td>
-                    <td class="px-6 py-4">
-                        <a href="{{ $website->url }}" class="text-blue-600 hover:text-blue-900" target="_blank">
-                            {{ $website->url }}
-                        </a>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                            {{ $website->latestLog?->status === 'success'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800' }}">
-                            {{ $website->latestLog?->status === 'success' ? 'Online' : 'Offline' }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
-                        <a href="{{ route('websites.edit', $website) }}"
-                           class="mr-3 text-indigo-600 hover:text-indigo-900">Szerkesztés</a>
-
-                        <form action="{{ route('websites.destroy', $website) }}"
-                              method="POST"
-                              class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="text-red-600 hover:text-red-900"
-                                    onclick="return confirm('Biztosan törölni szeretnéd?')">
-                                Törlés
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+                    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                        <div class="p-6">
+                            <h5 class="text-xl font-semibold mb-2">{{ $website->name }}</h5>
+                            <p class="text-gray-600 mb-4">{{ $website->url }}</p>
+                            <div class="flex justify-between">
+                                <a href="{{ route('websites.edit', $website) }}" 
+                                   class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+                                    Szerkesztés
+                                </a>
+                                <form action="{{ route('websites.destroy', $website) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">
+                                        Törlés
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
-            </tbody>
-        </table>
+            </div>
+        </div>
     </div>
-</div>
-</div>
 </x-app-layout>
