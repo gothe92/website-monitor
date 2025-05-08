@@ -27,7 +27,7 @@
                                     {{ $averageResponseTime ? round($averageResponseTime / 1000, 2) . 's' : 'Nincs adat' }}
                                 </span>
                             </div>
-                            <div>
+                            <div class="text-right">
                                 <span
                                     class="px-3 py-1 rounded-full text-sm mt-2 {{ $website['stats']['status']['is_online'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                     {{ $website['stats']['status']['is_online'] ? 'Online' : 'Offline' }}
