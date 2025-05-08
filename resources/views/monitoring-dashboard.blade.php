@@ -32,6 +32,7 @@
                 </div>
                 
             </div>
+            </div>
 
             {{-- 3. Válaszidő grafikon (utolsó óra) --}}
             <div class="relative flex flex-col h-16 rounded-lg bg-gray-50">
