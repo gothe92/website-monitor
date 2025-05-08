@@ -30,7 +30,7 @@
             </div>
 
             {{-- 3. Válaszidő grafikon (utolsó óra) --}}
-            <div class="relative flex flex-col h-32 rounded-lg bg-gray-50">
+            <div class="relative flex flex-col h-16 rounded-lg bg-gray-50">
                 <div class="flex w-full h-full">
                     @php
                         $lastHourLogs = collect($website['logs'])->take(-120);
