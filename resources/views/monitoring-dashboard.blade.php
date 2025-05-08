@@ -7,35 +7,29 @@
                 @foreach ($websites as $website)
                     <div class="flex flex-col p-4 bg-white rounded-lg shadow-lg">
                         {{-- 1. Cím és URL --}}
-                        <div class="grid grid-cols-2">
-                            
-                                <div class="mb-4">
+                        <div class="grid grid-cols-3">
+
+                            <div class="mb-4">
+                                <a href="{{ $website['url'] }}" target="_blank">
                                     <h2 class="text-xl font-semibold">{{ $website['name'] }}</h2>
-                                    <a href="{{ $website['url'] }}"
-                                        class="text-sm text-blue-600 hover:text-blue-800 truncate block"
-                                        target="_blank">
-                                        {{ Str::limit($website['url'], 50) }}
-                                    </a>
-                                </div>
 
-                                {{-- 2. Átlag és státusz --}}
-                                <div class="flex items-center justify-between mb-4">
-                                    @php
-                                        $averageResponseTime = collect($website['logs'])->avg('response_time');
-                                    @endphp
-                                    <div class="flex flex-col">
-                                        <span class="text-sm text-gray-600">
-                                            Átlag:
-                                            {{ $averageResponseTime ? round($averageResponseTime / 1000, 2) . 's' : 'Nincs adat' }}
-                                        </span>
-                                        <span
-                                            class="px-3 py-1 rounded-full text-sm mt-2 {{ $website['stats']['status']['is_online'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                            {{ $website['stats']['status']['is_online'] ? 'Online' : 'Offline' }}
-                                        </span>
-                                    </div>
-                                </div>
+                                </a>
+                            </div>
 
-                            
+                            @php
+                            $averageResponseTime = collect($website['logs'])->avg('response_time');
+                        @endphp
+                        
+                            <span class="text-sm text-gray-600">
+                                Átlag:
+                                {{ $averageResponseTime ? round($averageResponseTime / 1000, 2) . 's' : 'Nincs adat' }}
+                            </span>
+                            <span
+                                class="px-3 py-1 rounded-full text-sm mt-2 {{ $website['stats']['status']['is_online'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ $website['stats']['status']['is_online'] ? 'Online' : 'Offline' }}
+                            </span>
+
+
                         </div>
 
                         {{-- 3. Válaszidő grafikon (utolsó óra) --}}
