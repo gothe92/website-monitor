@@ -103,6 +103,13 @@
                                                 default => 'bg-green-100 text-green-800'
                                             };
 
+                                            $priority = match(true) {
+                                                $log['status'] === 'error' => 1,
+                                                $log['response_time'] > 10000 => 2,
+                                                $log['response_time'] > 5000 => 3,
+                                                default => 4
+                                            };
+
                                             return [
                                                 'date' => $log['formatted_time'],
                                                 'website' => $website['name'],
@@ -110,10 +117,16 @@
                                                 'details' => $log['status'] === 'error' 
                                                     ? 'Nem sikerült elérni a weboldalt' 
                                                     : 'Válaszidő: ' . round($log['response_time']/1000, 2) . 's',
-                                                'color' => $eventColor
+                                                'color' => $eventColor,
+                                                'priority' => $priority
                                             ];
                                         });
-                                })->sortByDesc('date')->take(10);
+                                })
+                                ->sortBy([
+                                    ['priority', 'asc'],
+                                    ['date', 'desc']
+                                ])
+                                ->take(10);
                             @endphp
 
                             @forelse($criticalEvents as $event)
