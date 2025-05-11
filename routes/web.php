@@ -3,6 +3,7 @@
 use App\Http\Controllers\MonitoringDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\CriticalEventsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,10 +13,10 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('websites', WebsiteController::class);
     Route::get('/monitoring', [MonitoringDashboardController::class, 'index'])->name('monitoring.dashboard');
+    Route::get('/critical-events', [CriticalEventsController::class, 'index'])
+        ->middleware(['auth'])
+        ->name('critical-events.index');
 });
-
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
