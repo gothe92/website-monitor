@@ -160,12 +160,19 @@ class AsyncMonitorWebsite extends Command
     }
 
     /**
-     * Delete log entries older than 1 day
+     * Delete log entries older than 1 day, but keep critical entries
      */
     private function cleanupOldLogs()
     {
         try {
             $deletedCount = WebsiteLog::where('created_at', '<', Carbon::now()->subDay())
+                ->where(function ($query) {
+                    $query->where(function ($q) {
+                        $q->where('status', '!=', 'error')
+                          ->where('status', '!=', 'success_with_ssl_warning')
+                          ->where('response_time', '<=', 5000);
+                    });
+                })
                 ->delete();
 
             $this->info("Cleaned up {$deletedCount} old log entries.");
