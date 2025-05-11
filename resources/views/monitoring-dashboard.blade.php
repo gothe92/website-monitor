@@ -1,7 +1,6 @@
 <x-app-layout>
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <h1 class="mb-8 text-3xl font-bold">Website Monitoring Dashboard</h1>
 
             {{-- Kritikus események táblázat --}}
             <div class="mb-8">
