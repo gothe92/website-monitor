@@ -4,7 +4,7 @@
             <h1 class="mb-8 text-3xl font-bold">Website Monitoring Dashboard</h1>
 
             {{-- Kritikus események táblázat --}}
-            <div class="mt-8">
+            <div class="mb-8">
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
