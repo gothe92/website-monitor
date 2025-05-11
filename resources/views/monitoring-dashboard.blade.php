@@ -86,16 +86,31 @@
                                     return collect($website['logs'])
                                         ->filter(function($log) {
                                             return $log['status'] === 'error' || 
-                                                   ($log['response_time'] && $log['response_time'] > 10000);
+                                                   ($log['response_time'] && $log['response_time'] > 5000);
                                         })
                                         ->map(function($log) use ($website) {
+                                            $eventType = match(true) {
+                                                $log['status'] === 'error' => 'Hiba',
+                                                $log['response_time'] > 10000 => 'Kritikus lassúság',
+                                                $log['response_time'] > 5000 => 'Lassú válasz',
+                                                default => 'Normál'
+                                            };
+                                            
+                                            $eventColor = match(true) {
+                                                $log['status'] === 'error' => 'bg-red-100 text-red-800',
+                                                $log['response_time'] > 10000 => 'bg-red-100 text-red-800',
+                                                $log['response_time'] > 5000 => 'bg-yellow-100 text-yellow-800',
+                                                default => 'bg-green-100 text-green-800'
+                                            };
+
                                             return [
                                                 'date' => $log['formatted_time'],
                                                 'website' => $website['name'],
-                                                'event' => $log['status'] === 'error' ? 'Hiba' : 'Lassú válasz',
+                                                'event' => $eventType,
                                                 'details' => $log['status'] === 'error' 
                                                     ? 'Nem sikerült elérni a weboldalt' 
-                                                    : 'Válaszidő: ' . round($log['response_time']/1000, 2) . 's'
+                                                    : 'Válaszidő: ' . round($log['response_time']/1000, 2) . 's',
+                                                'color' => $eventColor
                                             ];
                                         });
                                 })->sortByDesc('date')->take(10);
@@ -110,7 +125,7 @@
                                         {{ $event['website'] }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $event['event'] === 'Hiba' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $event['color'] }}">
                                             {{ $event['event'] }}
                                         </span>
                                     </td>
