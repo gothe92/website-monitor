@@ -4,7 +4,14 @@
             <h1 class="mb-8 text-3xl font-bold">Website Monitoring Dashboard</h1>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach ($websites as $website)
+                @php
+                    $sortedWebsites = collect($websites)->map(function($website) {
+                        $website['average_response_time'] = collect($website['logs'])->avg('response_time');
+                        return $website;
+                    })->sortByDesc('average_response_time');
+                @endphp
+                
+                @foreach ($sortedWebsites as $website)
                     <div class="flex flex-col p-4 bg-white rounded-lg shadow-lg">
                         {{-- 1. Cím és URL --}}
 
