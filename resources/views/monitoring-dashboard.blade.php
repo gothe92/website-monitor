@@ -66,6 +66,69 @@
                     </div>
                 @endforeach
             </div>
+
+            {{-- Kritikus események táblázat --}}
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold mb-4">Kritikus események</h2>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dátum</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weboldal</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Esemény</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Részletek</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @php
+                                $criticalEvents = collect($websites)->flatMap(function($website) {
+                                    return collect($website['logs'])
+                                        ->filter(function($log) {
+                                            return $log['status'] === 'error' || 
+                                                   ($log['response_time'] && $log['response_time'] > 10000);
+                                        })
+                                        ->map(function($log) use ($website) {
+                                            return [
+                                                'date' => $log['formatted_time'],
+                                                'website' => $website['name'],
+                                                'event' => $log['status'] === 'error' ? 'Hiba' : 'Lassú válasz',
+                                                'details' => $log['status'] === 'error' 
+                                                    ? 'Nem sikerült elérni a weboldalt' 
+                                                    : 'Válaszidő: ' . round($log['response_time']/1000, 2) . 's'
+                                            ];
+                                        });
+                                })->sortByDesc('date')->take(10);
+                            @endphp
+
+                            @forelse($criticalEvents as $event)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $event['date'] }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ $event['website'] }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $event['event'] === 'Hiba' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                            {{ $event['event'] }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $event['details'] }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                                        Nincsenek kritikus események az elmúlt időszakból
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
